@@ -7,11 +7,13 @@ gameController.UPSERT_USER("Nilay", "china", "nilay@letstransport.team")
 gameController.UPSERT_USER("Parijat", "India", "parijat@letstransport.team")
 gameController.UPSERT_USER("Parat", "India", "parijat@letstransport.team")
 
-gameController.UPSERT_SCORE("niharika@gmail.com", -1)
-gameController.UPSERT_SCORE("parijat@letstransport.team", 1)
-gameController.UPSERT_SCORE("nilay@letstransport.team", 15)
+gameController.UPSERT_SCORE("niharika@gmail.com", 1)
+gameController.UPSERT_SCORE("parijat@letstransport.team", 0)
+gameController.UPSERT_SCORE("nilay@letstransport.team", 10)
 
 gameController.UPSERT_USER("Keshow", "Argentina", "keshow@l")
+
+gameController.UPSERT_SCORE("keshow@l", 1)
 
 gameController.GET_TOP(3)
 gameController.GET_TOP(2, "India")
