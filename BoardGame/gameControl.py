@@ -18,8 +18,6 @@ class gameControl(object):
        
         if(isMailPresent == "false"):#adding the user
             recordedTime = time.localtime()
-            #print(type(recordedTime))
-            #print(pd.to_datetime(recordedTime))
             users = user(name, country, email, time.strftime("%H:%M:%S",recordedTime))
             self.userDetails.append(users)
             self.userEmails.append(users.email)
@@ -47,16 +45,17 @@ class gameControl(object):
             print("Score should be a non negative Integer")
 
 
-
+    #print top n users with country if given
     def GET_TOP(self, n, country=""):
         countries = 0
         givenCountryUsers = []
         sortedByScoreCountry = []
         
-        if(n <= len(self.userDetails) and n!=0):
+        if(n <= len(self.userDetails) and n!=0): #n shud be less than lenth of userslist
             
-            if(country != ""):#if country is given
-                for i in range(len(self.userDetails)):
+            #if country is given
+            if(country != ""):
+                for i in range(len(self.userDetails)):      #filtering users with country
                     if(self.userDetails[i].country == country):
                         countries = countries+1
                         givenCountryUsers.append(self.userDetails[i])
@@ -64,13 +63,13 @@ class gameControl(object):
                
                 if(countries != 0):
                     sortedByScoreCountry = sorted(givenCountryUsers, key=lambda x: x.score, reverse=True)
-                else:
+                else:  #if given country users not present
                     print("No users from the given country")
             
             else: 
                 sortedByScoreCountry = sorted(self.userDetails, key=lambda x: x.score, reverse=True)
             
-            for i in range(len(sortedByScoreCountry)-1):
+            for i in range(len(sortedByScoreCountry)-1): #checking for same score and sorting by time
                 if(sortedByScoreCountry[i].score == sortedByScoreCountry[i+1].score):
                     if(sortedByScoreCountry[i].recordedTime > sortedByScoreCountry[i+1].recordedTime):
                         temp= sortedByScoreCountry[i]
@@ -80,14 +79,15 @@ class gameControl(object):
             print("Top {} users are".format(n))
             i = 0            
             while(i<n):
-                print("{}.{}  ".format(i+1,sortedByScoreCountry[i].email))
+                print("{}.{}".format(i+1,sortedByScoreCountry[i].email))
                 i= i+1
 
         else:
             print("Enter a valid number: postive integer less than number of Users")
 
     
-    
+    #print users with givenscore
+    #assumption:score should be non negative integer
     def GET_USERS_WITH_SCORE(self, givenScore):
         count = 0
         
@@ -107,6 +107,7 @@ class gameControl(object):
     def SEARCH(self, name, score, country):
         searchList = []
        
+
         if(name is not None):
             for i in range(len(self.userDetails)):
                 if(self.userDetails[i].name == name):
@@ -117,8 +118,8 @@ class gameControl(object):
             if(len(searchList) != 0):
                 for i in range(len(searchList)):
                     if(searchList[i].score != score):
-                        del searchList[i]
-            elif(name is None):
+                        del searchList[i]             #delete from list if score doesn't match
+            elif(name is None):  #if name is not given
                 for i in range(len(self.userDetails)):
                     if(self.userDetails[i].score == score):
                         isScorePresent = "True"
@@ -130,9 +131,9 @@ class gameControl(object):
                     
                     for i in range(len(searchList)):
                         if(searchList[i].country != country):
-                            del searchList[i]
+                            del searchList[i]         #delete from list if country doesn't match
                             
-            elif(name is None and score is None):
+            elif(name is None and score is None): #if only country is given
                 for i in range(len(self.userDetails)):
                     if(self.userDetails[i].country == country):
                         searchList.append(self.userDetails[i])
@@ -142,7 +143,8 @@ class gameControl(object):
             print(searchList[i].email)
 
 
-    
+    #printing users in the score range
+    # assumption: lowscore and highscore values need to be non negative
     def GET_RANGE(self, lowScore, highScore):
         rangeList = []
         if(lowScore >= 0 and highScore >=0):
