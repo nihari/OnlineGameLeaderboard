@@ -5,7 +5,7 @@ class gameControl(object):
     userDetails = []
     userEmails = []
 
-    #checking if given mailid is present in userslist
+    #checking if given mail id is present in userslist
     def isEmailPresent(self, mail):
         for i in range(len(self.userEmails)):
             if(self.userEmails[i] == mail):
@@ -18,6 +18,8 @@ class gameControl(object):
        
         if(isMailPresent == "false"):#adding the user
             recordedTime = time.localtime()
+            #print(type(recordedTime))
+            #print(pd.to_datetime(recordedTime))
             users = user(name, country, email, time.strftime("%H:%M:%S",recordedTime))
             self.userDetails.append(users)
             self.userEmails.append(users.email)
@@ -32,16 +34,13 @@ class gameControl(object):
     def UPSERT_SCORE(self, email, score):
 
         if(score >= 0):
-            count = 0
-            for i in range(len(self.userDetails)):
-                if(self.userDetails[i].email == email):
-                    count = count+1
-                    prevScore = self.userDetails[i].score
-                    self.userDetails[i].score = score
-                    print("score of {} is updated from {} to {}".format(self.userDetails[i].email, prevScore, self.userDetails[i].score))
-                    break
+            isMailPresent, index = self.isEmailPresent(email)
+            if(isMailPresent == "True"):
+                prevScore = self.userDetails[index].score
+                self.userDetails[index].score = score
+                print("score of {} is updated from {} to {}".format(self.userDetails[index].email, prevScore, self.userDetails[index].score))
 
-            if(count == 0):
+            else:
                 print("user of mailId:{} not present in the Board".format(email))
     
         else: 
@@ -56,7 +55,7 @@ class gameControl(object):
         
         if(n <= len(self.userDetails) and n!=0):
             
-            if(country != ""):
+            if(country != ""):#if country is given
                 for i in range(len(self.userDetails)):
                     if(self.userDetails[i].country == country):
                         countries = countries+1
@@ -68,11 +67,18 @@ class gameControl(object):
                 else:
                     print("No users from the given country")
             
-            else:  
+            else: 
                 sortedByScoreCountry = sorted(self.userDetails, key=lambda x: x.score, reverse=True)
             
+            for i in range(len(sortedByScoreCountry)-1):
+                if(sortedByScoreCountry[i].score == sortedByScoreCountry[i+1].score):
+                    if(sortedByScoreCountry[i].recordedTime > sortedByScoreCountry[i+1].recordedTime):
+                        temp= sortedByScoreCountry[i]
+                        sortedByScoreCountry[i]=sortedByScoreCountry[i+1]
+                        sortedByScoreCountry[i+1] = temp
+
             print("Top {} users are".format(n))
-            i = 0
+            i = 0            
             while(i<n):
                 print("{}.{}  ".format(i+1,sortedByScoreCountry[i].email))
                 i= i+1
@@ -121,11 +127,11 @@ class gameControl(object):
 
         if(country is not None):
             if(len(searchList) != 0):
-                    print("inside country")
+                    
                     for i in range(len(searchList)):
                         if(searchList[i].country != country):
                             del searchList[i]
-                            print("inside del country")
+                            
             elif(name is None and score is None):
                 for i in range(len(self.userDetails)):
                     if(self.userDetails[i].country == country):
@@ -162,7 +168,7 @@ class gameControl(object):
                 stringMatchUsers.append(self.userDetails[i].email)
 
         if(len(stringMatchUsers) == 0):
-           print("No matching name Found")
+           print("No matching name Found for {}".format(string))
         else:
             print("Users with matching {} are".format(string))
             for i in range(len(stringMatchUsers)):
