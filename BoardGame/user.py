@@ -8,6 +8,5 @@ class user(object):
         self.email = email
         self.recordedTime = recordedTime
         self.score = 0
-        #print(self.email)
         
        
