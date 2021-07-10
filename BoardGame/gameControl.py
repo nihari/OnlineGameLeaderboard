@@ -24,6 +24,8 @@ class gameControl(object):
         except:
                print("user with EmailId: {} already present".format(email))
     
+
+    
     def UPSERT_SCORE(self, email, score):
         count = 0
         for i in range(len(self.userDetails)):
@@ -35,7 +37,9 @@ class gameControl(object):
 
         if(count == 0):
          print("user of mailId:{} not present in the Board".format(email))
-               
+
+
+
     def GET_TOP(self, n, country=""):
         countries = 0
         givenCountryUsers = []
@@ -57,13 +61,10 @@ class gameControl(object):
                             sortedByScoreCountry = sorted(givenCountryUsers, key=lambda x: x.score, reverse=True)
                     except: 
                           print("No users from the given country")
-
-
                 
                 else:  
                     sortedByScoreCountry = sorted(self.userDetails, key=lambda x: x.score, reverse=True)
                
-
                 print("Top {} users are".format(n))
                 i = 0
                 while(i<n):
@@ -88,3 +89,40 @@ class gameControl(object):
                  print("No users on the Board with score: {}", givenScore)
         except:
             print("Score should be a non negative integer")
+
+
+
+    def SEARCH(self, name, score, country):
+        searchList = []
+       
+        if(name is not None):
+            for i in range(len(self.userDetails)):
+                if(self.userDetails[i].name == name):
+                    searchList.append(self.userDetails[i].email)
+
+
+        if(score is not None): 
+            if(len(searchList) != 0):
+                for i in range(len(self.searchList)):
+                    if(self.searchList[i].score == score):
+                        searchList.append(self.searchList[i].email)
+            else:
+                for i in range(len(self.userDetails)):
+                    if(self.userDetails[i].score == score):
+                        searchList.append(self.userDetails[i].email)
+
+
+        if(country is not None):
+            if(len(searchList) != 0):
+                for i in range(len(self.searchList)):
+                    if(self.searchList[i].country == country):
+                        searchList.append(self.searchList[i].email)
+            else:
+                for i in range(len(self.userDetails)):
+                    if(self.userDetails[i].country == country):
+                        searchList.append(self.userDetails[i].email)
+        
+        print("Search result: found {}".format(len(searchList)))
+        for in range(len(searchList)):
+            print(searchList[i])
+    

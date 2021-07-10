@@ -1,23 +1,27 @@
 from BoardGame.gameControl import gameControl
 
-print("inside project")
-print("inside projectrr")
-
 gameController = gameControl()
 
 gameController.UPSERT_USER("niha", "India", "niharika@gmail.com")
-gameController.UPSERT_USER("Nilay", "India", "nilay@letstransport.team")
+gameController.UPSERT_USER("Nilay", "china", "nilay@letstransport.team")
 gameController.UPSERT_USER("Parijat", "India", "parijat@letstransport.team")
 
 A = gameController.userDetails
-for i in range(len(A)):
-  print(A[i].name + " ")
+#for i in range(len(A)):
+  #print(A[i].name + " ")
 
 gameController.UPSERT_SCORE("niharika@gmail.com", 10)
-gameController.UPSERT_SCORE("parijat@letstransport", 1)
+gameController.UPSERT_SCORE("parijat@letstransport.team", 1)
 gameController.UPSERT_SCORE("nilay@letstransport.team", 15)
 
 gameController.UPSERT_USER("Keshow", "Argentina", "keshow@l")
 
 gameController.GET_TOP(3)
+gameController.GET_TOP(2, "India")
+
+gameController.GET_USERS_WITH_SCORE(0)
+
+gameController.SEARCH(None, None, "India")
+gameController.SEARCH("Niha", None, "India")
+
 
