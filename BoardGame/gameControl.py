@@ -4,8 +4,8 @@ import time
 class gameControl(object):
     userDetails = []
     userEmails = []
-    #User = user()
 
+    #checking if given mailid is present in userslist
     def isEmailPresent(self, mail):
         for i in range(len(self.userEmails)):
             if(self.userEmails[i] == mail):
@@ -16,13 +16,13 @@ class gameControl(object):
     def UPSERT_USER(self, name, country, email):
         isMailPresent, index = self.isEmailPresent(email)
        
-        if(isMailPresent == "false"):
+        if(isMailPresent == "false"):#adding the user
             recordedTime = time.localtime()
             users = user(name, country, email, time.strftime("%H:%M:%S",recordedTime))
             self.userDetails.append(users)
             self.userEmails.append(users.email)
             print("{} is added to the leaderboard".format(email))
-        else:
+        else:#updating the existing user
              self.userDetails[index].name = name
              self.userDetails[index].country = country
              print("{} is updated in the leaderboard".format(email))
@@ -30,9 +30,9 @@ class gameControl(object):
 
 
     def UPSERT_SCORE(self, email, score):
-        count = 0
 
         if(score >= 0):
+            count = 0
             for i in range(len(self.userDetails)):
                 if(self.userDetails[i].email == email):
                     count = count+1
@@ -54,7 +54,7 @@ class gameControl(object):
         givenCountryUsers = []
         sortedByScoreCountry = []
         
-        if(n <= len(self.userDetails)):
+        if(n <= len(self.userDetails) and n!=0):
             
             if(country != ""):
                 for i in range(len(self.userDetails)):
@@ -78,7 +78,7 @@ class gameControl(object):
                 i= i+1
 
         else:
-            print("Exceeds the number of users present in the board")
+            print("Enter a valid number: postive integer less than number of Users")
 
     
     
@@ -153,4 +153,18 @@ class gameControl(object):
         
         else:
              print("Scores should be non negative number")
+        
+    #looking for substring in name
+    def SEARCH_NAME(self, string):
+        stringMatchUsers = []
+        for i in range(len(self.userDetails)):
+            if string in self.userDetails[i].name:
+                stringMatchUsers.append(self.userDetails[i].email)
+
+        if(len(stringMatchUsers) == 0):
+           print("No matching name Found")
+        else:
+            print("Users with matching {} are".format(string))
+            for i in range(len(stringMatchUsers)):
+                print(stringMatchUsers[i])
         
